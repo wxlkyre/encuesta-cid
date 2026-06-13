@@ -148,28 +148,34 @@ function FaceNeutral({ size = 56, active, hovered }: { size?: number; active: bo
   const fill = active ? "#FF9F0A" : hovered ? "rgba(255,159,10,0.28)" : "rgba(255,159,10,0.13)";
   const stroke = active ? "#E68900" : hovered ? "rgba(255,159,10,0.6)" : "rgba(255,159,10,0.35)";
   const ink = active ? "#fff" : hovered ? "rgba(255,159,10,0.9)" : "rgba(255,159,10,0.6)";
+  const browInk = active ? "rgba(255,255,255,0.85)" : hovered ? "rgba(255,159,10,0.8)" : "rgba(255,159,10,0.45)";
 
   return (
     <svg width={size} height={size} viewBox="0 0 52 52" fill="none">
       <circle cx="26" cy="26" r="25" fill={fill} stroke={stroke} strokeWidth="1.5"
         style={{ transition: `fill ${T}, stroke ${T}` }} />
 
+      {/* Eyebrows — raise on hover/active */}
+      <path d={lit ? "M14.5 15.5 Q18.5 13.5 22.5 15.5" : "M15.5 18 Q18.5 17 21.5 18"}
+        stroke={browInk} strokeWidth="1.8" strokeLinecap="round" fill="none"
+        style={{ transition: `d ${T}, stroke ${T}` }} />
+      <path d={lit ? "M29.5 15.5 Q33.5 13.5 37.5 15.5" : "M30.5 18 Q33.5 17 36.5 18"}
+        stroke={browInk} strokeWidth="1.8" strokeLinecap="round" fill="none"
+        style={{ transition: `d ${T}, stroke ${T}` }} />
+
       {/* Eyes */}
-      <ellipse cx="18.5" cy="21" rx="2.5" ry={lit ? 3 : 2.5} fill={ink}
-        style={{ transition: `ry ${T}, fill ${T}` }} />
-      <ellipse cx="33.5" cy="21" rx="2.5" ry={lit ? 3 : 2.5} fill={ink}
-        style={{ transition: `ry ${T}, fill ${T}` }} />
+      <ellipse cx="18.5" cy={lit ? 21.5 : 21} rx="2.5" ry="2.5" fill={ink}
+        style={{ transition: `cy ${T}, fill ${T}` }} />
+      <ellipse cx="33.5" cy={lit ? 21.5 : 21} rx="2.5" ry="2.5" fill={ink}
+        style={{ transition: `cy ${T}, fill ${T}` }} />
 
-      {/* Flat line — fades out */}
-      <line x1="17" y1="34" x2="35" y2="34" stroke={ink} strokeWidth="2.5" strokeLinecap="round"
-        style={{ opacity: lit ? 0 : 1, transition: `opacity ${T}` }} />
-
-      {/* Half-open mouth — fades in: slight downward curve + small gap */}
-      <g style={{ opacity: lit ? 1 : 0, transition: `opacity ${T}` }}>
-        <path d="M17 32 Q26 40 35 32 Q26 36 17 32 Z"
-          fill={active ? "rgba(255,255,255,0.85)" : "rgba(255,159,10,0.22)"} />
-        <path d="M17 32 Q26 40 35 32" stroke={ink} strokeWidth="2.5" strokeLinecap="round" fill="none" />
-      </g>
+      {/* Flat mouth — widens on hover/active, stays flat */}
+      <line
+        x1={lit ? 13 : 17} y1="34"
+        x2={lit ? 39 : 35} y2="34"
+        stroke={ink} strokeWidth="2.5" strokeLinecap="round"
+        style={{ transition: `x1 ${T}, x2 ${T}, stroke ${T}` }}
+      />
     </svg>
   );
 }
@@ -428,7 +434,7 @@ export default function App() {
         <header className="sticky top-0 z-20 px-6 py-4 flex items-center justify-between" style={glassHeader}>
           <div>
             <p className="text-[10px] font-mono tracking-[0.18em] uppercase mb-0.5" style={{ color: "rgba(10,132,255,0.7)" }}>
-              Centro Integral de Documentación · CUCEI
+              Centro Integral de Documentación · CID
             </p>
             <h1 className="text-lg font-semibold text-foreground">Encuesta de Satisfacción</h1>
           </div>
