@@ -406,7 +406,21 @@ export default function App() {
     responses.filter((r) => r.comment).map((r) => ({ type: r.type, date: r.date, text: r.comment! })).reverse(),
     [responses]);
 
-  const ratingEmoji = (v: number) => v === 3 ? "😊" : v === 2 ? "😐" : "😠";
+  const ratingBadge = (v: number) => {
+    const cfg = v === 3
+      ? { label: "S", color: "#16a34a", bg: "rgba(52,199,89,0.12)", border: "rgba(52,199,89,0.3)" }
+      : v === 2
+      ? { label: "R", color: "#b45309", bg: "rgba(255,159,10,0.12)", border: "rgba(255,159,10,0.35)" }
+      : { label: "I", color: "#dc2626", bg: "rgba(255,69,58,0.12)", border: "rgba(255,69,58,0.3)" };
+    return (
+      <span
+        className="inline-block px-2 py-0.5 rounded-md text-xs font-bold font-mono"
+        style={{ color: cfg.color, background: cfg.bg, border: `1px solid ${cfg.border}` }}
+      >
+        {cfg.label}
+      </span>
+    );
+  };
 
   // ── Shared style helpers ──────────────────────────────────────────────────────
 
@@ -967,7 +981,7 @@ export default function App() {
                           <tr key={r.id} className="transition-colors hover:bg-white/20" style={{ borderBottom: "1px solid rgba(255,255,255,0.35)" }}>
                             <td className="px-4 py-3 font-mono text-xs" style={{ color: "#5A6480" }}>{r.date}</td>
                             <td className="px-4 py-3 text-xs whitespace-nowrap">{SURVEYS[r.type].title}</td>
-                            {r.answers.map((a, i) => <td key={i} className="px-4 py-3 text-center">{ratingEmoji(a)}</td>)}
+                            {r.answers.map((a, i) => <td key={i} className="px-4 py-3 text-center">{ratingBadge(a)}</td>)}
                             <td className="px-4 py-3 text-center font-mono font-bold text-sm" style={{ color: "#0A84FF" }}>{avg}</td>
                             <td className="px-4 py-3 text-xs max-w-[160px] truncate" style={{ color: "#5A6480" }}>{r.comment ?? "—"}</td>
                           </tr>
